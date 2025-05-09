@@ -22,6 +22,8 @@ const test = base.extend<PageFixtures>({
     context.feedPage = new FeedPage(page);
     context.articleEditor = new ArticleEditorPage(page);
     context.myProfile = new MyProfilePage(page);
+    context.articleEditor = new ArticleEditorPage(page);
+    context.myProfile = new MyProfilePage(page);
 
     await use(context);
   },
