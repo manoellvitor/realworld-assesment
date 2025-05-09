@@ -8,6 +8,7 @@ import { PageFixtures, RequestFixtures } from '../types';
 
 import { Api } from '../../util/api';
 import { ArticleEditorPage } from '../pages/article-editor-page';
+import { ArticlePage } from '../pages/article-page';
 import { FeedPage } from '../pages/feed-page';
 import { MyProfilePage } from '../pages/my-profile-page';
 import { SignInPage } from '../pages/signin-page';
@@ -22,8 +23,7 @@ const test = base.extend<PageFixtures>({
     context.feedPage = new FeedPage(page);
     context.articleEditor = new ArticleEditorPage(page);
     context.myProfile = new MyProfilePage(page);
-    context.articleEditor = new ArticleEditorPage(page);
-    context.myProfile = new MyProfilePage(page);
+    context.article = new ArticlePage(page);
 
     await use(context);
   },
