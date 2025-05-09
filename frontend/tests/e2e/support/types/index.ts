@@ -2,6 +2,7 @@ import { APIRequestContext, Page } from '@playwright/test';
 
 import { Api } from '../../util/api';
 import { ArticleEditorPage } from '../pages/article-editor-page';
+import { ArticlePage } from '../pages/article-page';
 import { FeedPage } from '../pages/feed-page';
 import { MyProfilePage } from '../pages/my-profile-page';
 import { SignInPage } from '../pages/signin-page';
@@ -19,8 +20,9 @@ export type PageFixtures = {
   signUp: SignUpPage;
   signIn: SignInPage;
   feedPage: FeedPage;
-  articleEditor: ArticleEditorPage;
   myProfile: MyProfilePage;
+  articleEditor: ArticleEditorPage;
+  article: ArticlePage;
 };
 
 export type UserCredentials = {
