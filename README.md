@@ -1,78 +1,155 @@
-# ![RealWorld Example App](logo.png)
+# Playwright Assignment
 
-> ### Django REST Framework + Angular codebase containing real world examples (CRUD, auth, advanced patterns, etc) that adheres to the [RealWorld](https://github.com/gothinkster/realworld) spec and API.
+This project is an end-to-end testing suite using Playwright. It includes tests for various scenarios of the RealWorld Application (conduit).
 
+## Project Structure
 
-### [Demo](https://thanhdev.pythonanywhere.com/)&nbsp;&nbsp;&nbsp;&nbsp;[RealWorld](https://github.com/gothinkster/realworld)
+### Key Files and Directories
 
+- **.env**: Environment variables file.
+- **.env.SAMPLE**: Sample environment variables file.
+- **.github/workflows/ci.yml**: GitHub Actions workflow for running Playwright tests.
+- **docker-compose**: Docker configuration for setting up the Test environment.
+- **package.json**: Project dependencies and scripts.
+- **playwright.config.ts**: Playwright configuration file.
+- **tests/**: Directory containing test specifications and support files.
 
-This codebase was created to demonstrate a fully fledged fullstack application built with **Django REST Framework + Angular** including CRUD operations, authentication, routing, pagination, and more.
+## Setup 🛠️
 
-We've gone to great lengths to adhere to the **Django REST Framework + Angular** community styleguides & best practices.
+### Prerequisites 📋
 
-For more information on how to this works with other frontends/backends, head over to the [RealWorld](https://github.com/gothinkster/realworld) repo.
+- Node.js (LTS version recommended).
+- Docker (for containerized execution) ⚠️ Docker must be installed in order to run the frontend / backend Containers (apps).
 
+## Setting Up the Test Environment
 
-# How it works
+1. Clone the repository:
 
-> See how the Medium.com clone (called Conduit) is built using Django REST Framework and Angular.
+```sh
+git clone https://github.com/manoellvitor/realworld-assesment.git
+```
 
-# Getting started
+2. Go into the correct folder:
 
-## Prerequisites
-Ensure you have Python 3 and Node.js installed on your system. The current project dependency versions are:
-- Python 3.10
-- Node.js 18.5.0
+```sh
+cd realworld-assesment
+```
 
-## Installation
-### Option 1: Using Docker Compose (Recommended)
-The simplest way to run the application is using Docker Compose:
+3. Run the docker command to bring the application into live (frontend / backend)
 
-```shell
+```sh
 docker compose up -d
 ```
-**Access the web application at [http://localhost:4200](http://localhost:4200).**
-### Option: 2 Frontend: Choose 1 of 2 ways below:
-- Install frontend dependencies and start frontend locally:
-```shell
-npm --prefix=frontend install
-npm --prefix=frontend start
-```
-This command will install and start the Angular development server. You can access the Angular application through your web browser at `http://localhost:4200`.
 
-- Install and build frontend as static files (Choose this if you don't want to make any changes to Frontend project):
-```shell
-npm --prefix=frontend install
-npm --prefix=frontend run build
+4. Go into the frontend folder to setup the tests:
+
+```sh
+cd realworld-assesment/frontend
 ```
 
-### Option: 2 Backend:
-- Set up a virtual environment
-```shell
-# Install environment and dependencies
-python3 -m venv .venv
-source .venv/bin/activate
+5. Install dependencies:
 
-# or use this command on Windows
-python3 -m venv .venv
-.venv/Scripts/activate
+```sh
+npm install
 ```
 
-- Install backend dependencies:
-```shell
-pip install -r backend/requirements.txt
+6. Install Playwright Browser Dependencies:
+
+```sh
+npx playwright install
 ```
 
-- Apply database migrations:
-```shell
-# Apply migrations
-python backend/manage.py migrate
+**The test suite can be configured using environment variables on a `.env` file:**
+
+7. Copy the sample environment file and configure it:
+
+```bash
+cp .env.SAMPLE .env
 ```
 
-- Run the Django development server:
-```shell
-# Run server
-python backend/manage.py runserver
+```env
+# .env File Example
+
+// URLs for the frontend and API
+BASE_URL =
+API_URL =
+
+// Users Data (add any unique values you like in here just make sure to use an email in the correct format email@test.com)
+USER_USERNAME_1 =
+USER_EMAIL_1 =
+USER_PASSWORD_1 =
+
+USER_USERNAME_2 =
+USER_EMAIL_2 =
+USER_PASSWORD_2 =
 ```
 
-Now, your local server should be running, and you can access this Django/Angular application through your web browser at http://localhost:8000.
+## Running Tests
+
+### Run All Tests
+
+```bash
+npx playwright test
+```
+
+### Run Tests in UI Mode
+
+```bash
+npx playwright test --ui
+```
+
+### Run Tests in Debug Mode
+
+```bash
+npx playwright test --debug
+```
+
+## Test Structure
+
+The test suite is organized as follows:
+
+```
+tests/
+└── e2e/
+    ├── home-page.spec.ts        # Home page tests
+    ├── write-article.spec.ts    # Article creation tests
+    ├── edit-delete.spec.ts      # Article editing and deletion
+    ├── comments.spec.ts         # Comment functionality
+    ├── favourite-toggle.spec.ts # Article favoriting
+    ├── follow-feed.spec.ts      # User following and feed
+    ├── support/                 # Support files [fixtures, pages, types]
+    └── util/                    # Test utilities
+```
+
+## Test Reports
+
+After running the tests, you can find:
+
+- HTML report: `playwright-report/`
+- Test results: `test-results/`
+
+To view the HTML report:
+
+```bash
+npx playwright show-report
+```
+
+## Common Issues and Solutions
+
+1. If tests fail to connect:
+
+   - Ensure the application is running at the configured BASE_URL
+   - Check if the API_URL is accessible
+   - Verify network connectivity
+   - Make sure the .env file is at the frontend folder and have the correct values
+
+2. If browser tests fail:
+
+   - Run `npx playwright install` to ensure browsers are installed
+   - Use `--debug` flag to see what's happening in the browser
+   - Check browser console for errors
+
+3. For timeout issues:
+   - Increase timeouts in playwright.config.ts
+   - Check if the application is responding slowly
+   - Verify system resources
