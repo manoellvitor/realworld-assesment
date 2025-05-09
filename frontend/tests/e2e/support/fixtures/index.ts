@@ -1,9 +1,15 @@
-import { Page, test as base, expect } from '@playwright/test';
+import {
+  APIRequestContext,
+  Page,
+  test as base,
+  expect,
+} from '@playwright/test';
+import { PageFixtures, RequestFixtures } from '../types';
 
+import { Api } from '../../util/api';
 import { ArticleEditorPage } from '../pages/article-editor-page';
 import { FeedPage } from '../pages/feed-page';
 import { MyProfilePage } from '../pages/my-profile-page';
-import { PageFixtures } from '../types';
 import { SignInPage } from '../pages/signin-page';
 import { SignUpPage } from '../pages/signup-page';
 
@@ -17,6 +23,13 @@ const test = base.extend<PageFixtures>({
     context.articleEditor = new ArticleEditorPage(page);
     context.myProfile = new MyProfilePage(page);
 
+    await use(context);
+  },
+
+  request: async ({ request }, use) => {
+    const context = request as APIRequestContext & RequestFixtures;
+
+    context.api = new Api(request);
     await use(context);
   },
 });

@@ -1,6 +1,9 @@
 import { Locator, Page, expect } from '@playwright/test';
 
+import DataContext from '../../util/data-context';
 import { UserCredentials } from '../types';
+
+const ANIMATION_DELAY = 500;
 
 export class FeedPage {
   private readonly heroHeader: (heading: string) => Locator;
@@ -37,5 +40,43 @@ export class FeedPage {
       .getByRole('button', { name: `Follow ${userData.username}` })
       .first()
       .click();
+  }
+
+  async validateArticleInMyFeed(userData: UserCredentials) {
+    await this.itemList('My Feed').filter({ hasText: 'My Feed' }).click();
+
+    await expect(
+      this.articlePreview(userData.username || '').first()
+    ).toBeVisible();
+  }
+
+  async favouriteArticle() {
+    const { title } = DataContext.values.getValue('articleData');
+    await this.articlePreview(title).first().getByRole('button').click();
+    await this.page.waitForTimeout(ANIMATION_DELAY);
+  }
+
+  async validateArticleIsFavourited() {
+    const { title } = DataContext.values.getValue('articleData');
+    const currentCount = await this.articlePreview(title)
+      .first()
+      .getByRole('button')
+      .textContent();
+    expect(Number(currentCount)).toBe(1);
+  }
+
+  async unfavouriteArticle() {
+    const { title } = DataContext.values.getValue('articleData');
+    await this.articlePreview(title).first().getByRole('button').click();
+    await this.page.waitForTimeout(ANIMATION_DELAY);
+  }
+
+  async validateArticleIsUnfavourited() {
+    const { title } = DataContext.values.getValue('articleData');
+    const currentCount = await this.articlePreview(title)
+      .first()
+      .getByRole('button')
+      .textContent();
+    expect(Number(currentCount)).toBe(0);
   }
 }
