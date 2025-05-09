@@ -6,13 +6,24 @@ This project is an end-to-end testing suite using Playwright. It includes tests 
 
 ### Key Files and Directories
 
-- **.env**: Environment variables file.
-- **.env.SAMPLE**: Sample environment variables file.
-- **.github/workflows/ci.yml**: GitHub Actions workflow for running Playwright tests.
-- **docker-compose**: Docker configuration for setting up the Test environment.
-- **package.json**: Project dependencies and scripts.
-- **playwright.config.ts**: Playwright configuration file.
-- **tests/**: Directory containing test specifications and support files.
+```
+📦 realworld-assesment
+   ├── 📂 .github (GitHub workflows and templates)
+   │ ├── 📂 workflows (Workflows)
+   │ │ ├── 📄 ci.yml (GitHub Actions workflow for running Playwright tests.)
+   │
+   ├── 📂 frontend (Angular application)
+   │ ├── 📂 playwright-report (Playwright test reports)
+   │ ├── 📂 tests (E2E tests)
+   │ ├── 📄 package.json (Frontend dependencies and scripts - Angular 18, Playwright, etc.)
+   │ ├── 📄 playwright.config.ts (Playwright E2E testing configuration)
+   │ ├── 📄 ..env.SAMPLE (Sample environment variables file)
+   │
+   ├── 📂 backend (Django REST Framework application)
+   │
+   ├── 📄 README.md (Project documentation)
+   ├── 📄 docker-compose.yml (Docker Compose configuration for services)
+```
 
 ## Setup 🛠️
 
@@ -29,7 +40,7 @@ This project is an end-to-end testing suite using Playwright. It includes tests 
 git clone https://github.com/manoellvitor/realworld-assesment.git
 ```
 
-2. Go into the correct folder:
+2. Go into the project folder:
 
 ```sh
 cd realworld-assesment
@@ -44,7 +55,7 @@ docker compose up -d
 4. Go into the frontend folder to setup the tests:
 
 ```sh
-cd realworld-assesment/frontend
+cd frontend
 ```
 
 5. Install dependencies:
@@ -71,8 +82,8 @@ cp .env.SAMPLE .env
 # .env File Example
 
 // URLs for the frontend and API
-BASE_URL =
-API_URL =
+BASE_URL = "http://localhost:4200"
+API_URL = "http://localhost:8000"
 
 // Users Data (add any unique values you like in here just make sure to use an email in the correct format email@test.com)
 USER_USERNAME_1 =
