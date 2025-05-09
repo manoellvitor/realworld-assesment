@@ -22,7 +22,9 @@ test.describe('Write Article', () => {
 
     await page.signIn.navigateToSignInPage();
     await page.signIn.performSignIn(userCredentials);
+
     await page.feedPage.validateSignIn();
+
     await page.articleEditor.navigateToNewArticlePage();
     await page.articleEditor.validateNewArticlePage();
     await page.articleEditor.createNewArticle();
