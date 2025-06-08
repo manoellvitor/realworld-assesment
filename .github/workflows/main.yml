@@ -187,7 +187,7 @@ jobs:
 
       - name: Move report to root
         run: |
-          mv playwright-report/* .
+          cp -r playwright-report/* .
           rm -rf playwright-report
 
       - name: Setup Pages
