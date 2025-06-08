@@ -10,6 +10,23 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
+    env:
+      # Backend environment variables
+      DEBUG: "True"
+      SECRET_KEY: ${{ secrets.SECRET_KEY }}
+      ALLOWED_HOSTS: "*"
+      DATABASE_URL: "sqlite:///db.sqlite3"
+
+      # Frontend environment variables from secrets
+      BASE_URL: ${{ secrets.BASE_URL }}
+      API_URL: ${{ secrets.API_URL }}
+      USER_USERNAME_1: ${{ secrets.USER_USERNAME_1 }}
+      USER_EMAIL_1: ${{ secrets.USER_EMAIL_1 }}
+      USER_PASSWORD_1: ${{ secrets.USER_PASSWORD_1 }}
+      USER_USERNAME_2: ${{ secrets.USER_USERNAME_2 }}
+      USER_EMAIL_2: ${{ secrets.USER_EMAIL_2 }}
+      USER_PASSWORD_2: ${{ secrets.USER_PASSWORD_2 }}
+
     steps:
       - uses: actions/checkout@v4
 
@@ -49,15 +66,56 @@ jobs:
           cd frontend
           npx playwright install --with-deps chromium
 
+      - name: Create .env file for Playwright
+        run: |
+          cd frontend
+          echo "BASE_URL=${{ secrets.BASE_URL }}" > .env
+          echo "API_URL=${{ secrets.API_URL }}" >> .env
+          echo "USER_USERNAME_1=${{ secrets.USER_USERNAME_1 }}" >> .env
+          echo "USER_EMAIL_1=${{ secrets.USER_EMAIL_1 }}" >> .env
+          echo "USER_PASSWORD_1=${{ secrets.USER_PASSWORD_1 }}" >> .env
+          echo "USER_USERNAME_2=${{ secrets.USER_USERNAME_2 }}" >> .env
+          echo "USER_EMAIL_2=${{ secrets.USER_EMAIL_2 }}" >> .env
+          echo "USER_PASSWORD_2=${{ secrets.USER_PASSWORD_2 }}" >> .env
+
+      - name: Start backend server
+        run: |
+          cd backend
+          python manage.py runserver 0.0.0.0:8000 &
+        env:
+          DEBUG: "True"
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          ALLOWED_HOSTS: "*"
+          DATABASE_URL: "sqlite:///db.sqlite3"
+
+      - name: Start frontend server
+        run: |
+          cd frontend
+          npm run start &
+        env:
+          BASE_URL: ${{ secrets.BASE_URL }}
+          API_URL: ${{ secrets.API_URL }}
+
+      - name: Wait for servers to start
+        run: |
+          sleep 10  # Give servers time to start
+
       - name: Run Playwright tests
         run: |
           cd frontend
           npm run test:e2e
+        env:
+          BASE_URL: ${{ secrets.BASE_URL }}
+          API_URL: ${{ secrets.API_URL }}
 
   build:
     needs: test
     runs-on: ubuntu-latest
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+
+    env:
+      BASE_URL: ${{ secrets.BASE_URL }}
+      API_URL: ${{ secrets.API_URL }}
 
     steps:
       - uses: actions/checkout@v4
