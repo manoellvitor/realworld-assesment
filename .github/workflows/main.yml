@@ -185,13 +185,18 @@ jobs:
           name: playwright-report
           path: playwright-report
 
+      - name: Move report to root
+        run: |
+          mv playwright-report/* .
+          rm -rf playwright-report
+
       - name: Setup Pages
         uses: actions/configure-pages@v4
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./playwright-report
+          path: .
 
       - name: Deploy to GitHub Pages
         id: deployment
