@@ -78,6 +78,17 @@ jobs:
           echo "USER_EMAIL_2=${{ secrets.USER_EMAIL_2 }}" >> .env
           echo "USER_PASSWORD_2=${{ secrets.USER_PASSWORD_2 }}" >> .env
 
+      - name: Run Django migrations
+        run: |
+          cd backend
+          python manage.py makemigrations
+          python manage.py migrate
+        env:
+          DEBUG: "True"
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          ALLOWED_HOSTS: "*"
+          DATABASE_URL: "sqlite:///db.sqlite3"
+
       - name: Start backend server
         run: |
           cd backend
